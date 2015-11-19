@@ -1,0 +1,22 @@
+<plugin id="org.dita-community.d3visualizer">
+  <extension id="xsl.transtype-d3"/>
+
+  <require plugin="org.dita-community.common.mapdriven"/> 
+  <require plugin="org.dita-community.common.xslt"/> 
+  
+  <feature extension="package.support.name" value="Eliot Kimber"/>
+  <feature extension="package.support.email" value="ekimber@contrext.com"/>  
+
+  <template file="build_transtype-d3_template.xml"/>
+  
+  <template file="xsl/map2d3_template.xsl"/>
+
+  <feature extension="dita.conductor.transtype.check" value="d3" type="txt"/>
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <!-- New way of specifying metadata with parameters contributed by the transtype:
+        https://github.com/dita-ot/dita-ot/issues/1757
+   -->
+  <transtype name="d3" extends="d4pCommons" desc="Graphical Map Visualizer for D3 (DITA 4 Publishers) - experimental">
+  </transtype>
+</plugin>

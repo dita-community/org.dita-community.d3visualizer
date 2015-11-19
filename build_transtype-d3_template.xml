@@ -1,0 +1,90 @@
+<project name="dita2d3" default="dita2d3"
+  >
+  
+  <!-- test to see where the plugin is located, plugins or demo -->
+  <dirname property="d3.dir" file="${ant.file.dita2d3}"/>
+	
+	<!-- Controls debugging within the XSLTs. Set to "true" to turn on debugging: -->
+	<property name="debug" value="false"/>
+	
+	<property name="d3.temp.dir" value="${dita.temp.dir}${file.separator}d3_temp"/>
+	<!-- This is the name of the d3 "dot" program, which is used to generate
+	     graph pictures from DOT (.gv) files. If it is not in your system PATH then
+	     set this property to the absolute path to the executable.
+	  -->
+	<property name="d3Args" value=""/>
+
+	<target name="dita2d3"
+    unless="noMap"
+    xmlns:dita="http://dita-ot.sourceforge.net"
+		dita:depends="build-init, preprocess, d3"
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction">
+  </target>
+  
+  <target name="d3"
+    unless="noMap"
+    depends="dita.map.d3"/>
+	  
+    
+  <target name="dita.map.d3.init"
+    description="Init properties for GraphViz">
+    <basename property="dita.map.toc.root"
+      file="${dita.input.filename}"
+      suffix=".ditamap" />
+    <condition property="args.d3.toc" value="${dita.map.toc.root}">
+      <not>
+        <isset property="args.d3.toc" />
+      </not>
+    </condition>
+    <condition property="out.ext" value=".json">
+      <not>
+        <isset property="out.ext" />
+      </not>
+    </condition>
+    <condition property="noPlugin">
+      <equals arg1="${dita.d3.plugin}" arg2="no" />
+    </condition>
+  	<condition property="d3.graph.type" value="navigation-map">
+      <not>
+        <isset property="d3.graph.type" />
+      </not>
+   </condition>
+
+
+  </target>
+  
+
+  
+  <target name="dita.map.d3" depends="dita.map.d3.init" 
+  	description="Generate d3 data files from the input map">
+  	
+  	<mkdir dir="${d3.temp.dir}"/>
+  	<makeurl file="${d3.temp.dir}" property="d3.xslt.outdir"/>
+  	<makeurl file="${dita.temp.dir}" property="d3.xslt.tempdir"/>
+  	
+  	<property name="map2d3.style" location="${d3.dir}/xsl/map2d3.xsl"/>
+		<property name="d3.result.filename" value="${dita.map.filename.root}.json"/>
+
+    <xslt processor="trax"
+      basedir="${dita.temp.dir}"
+      destdir="${output.dir}"
+      includesfile="${dita.temp.dir}${file.separator}fullditamap.list"
+      classpathref="dost.class.path"
+      style="${map2d3.style}">
+      <param name="debug" expression="${debug}"/>
+     	<param name="tempdir" expression="${d3.xslt.tempdir}"/>
+    	<param name="outdir" expression="${output.dir}"/>
+    	<param name="rawPlatformString" expression="${os.name}"/>
+    	<param name="graphType" expression="${d3.graph.type}"/>
+
+    	<!-- Parameters from dita2xhtml and similar transtypes: -->   
+      <param name="WORKDIR" expression="${workdir}" if="workdir"/>
+      <param name="DRAFT" expression="${args.draft}" if="args.draft"></param>
+      <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"></param>
+    	<param name="OUTPUTDIR" expression="${output.dir}"/>
+      <xmlcatalog refid="dita.catalog"></xmlcatalog>
+    </xslt>
+
+  </target>
+  
+</project>
