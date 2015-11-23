@@ -27,15 +27,20 @@
 
     <xsl:message> + [INFO] Generating navigation tree graph...</xsl:message>
 
-    <xsl:message> + [INFO] Generating graph node declarations...</xsl:message>
+    <xsl:variable name="jsonFileURI" as="xs:string"
+      select="relpath:newFile($outdir, 'data.json')"
+    />    
     
-    <xsl:text>{
- "name": "</xsl:text><xsl:value-of select="$mapTitle"/><xsl:text>",&#x0a;</xsl:text>
- <xsl:text>"children": [&#x0a;</xsl:text>
-    <xsl:apply-templates mode="generate-nodes"/>
-    <xsl:text>
-    ]
-}</xsl:text>
+    <xsl:message> + [INFO] Generating JSON data file "<xsl:value-of select="$jsonFileURI"/>"...</xsl:message>
+    <xsl:result-document href="{$jsonFileURI}">
+        <xsl:text>{
+     "name": "</xsl:text><xsl:value-of select="$mapTitle"/><xsl:text>",&#x0a;</xsl:text>
+     <xsl:text>"children": [&#x0a;</xsl:text>
+        <xsl:apply-templates mode="generate-nodes"/>
+        <xsl:text>
+        ]
+    }</xsl:text>
+    </xsl:result-document>
     
     <xsl:message> + [INFO] Navigation tree graph generated.</xsl:message>
     

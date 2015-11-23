@@ -147,6 +147,7 @@
       + generateIndex   = "<xsl:sequence select="$generateIndex"/>
       + generateGlossary= "<xsl:sequence select="$generateGlossary"/>
       + debug           = "<xsl:sequence select="$debug"/>"
+      + outdir          = "<xsl:sequence select="$outdir"/>"
       
       Global Variables:
       
