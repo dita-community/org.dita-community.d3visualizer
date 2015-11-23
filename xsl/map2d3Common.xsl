@@ -41,7 +41,10 @@
       <xsl:text>&#x0a;]&#x0a;</xsl:text>
     </xsl:when>
       <xsl:otherwise>
-        <!-- FIXME: Not sure what size means -->
+        <!-- The size reflects the length of the label. Could probably
+             guess at it but it doesn't seem to actually affect the 
+             graph layout
+          -->
         <xsl:text> "size": 4000&#x0a;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
