@@ -20,6 +20,13 @@
     
     ============================= -->
   
+  <xsl:template mode="generate-nodes" match="
+    *[df:class(., 'map/topicref')]
+        [ancestor::*[df:class(., 'map/reltable')] or
+         ancestor-or-self::*[@processing-role = ('resource-only')]]" 
+    priority="10">
+    <!-- By default, ignore topicrefs within relationship tables -->
+  </xsl:template>
   
   <xsl:template mode="generate-nodes" match="*[df:isTopicHead(.) or df:isTopicRef(.)]">
     <xsl:variable name="label" select="df:getNavtitleForTopicref(.)" as="xs:string"/>    
